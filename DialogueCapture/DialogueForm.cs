@@ -16,6 +16,7 @@ namespace DialogueCapture
         public dialogueFrm()
         {
             InitializeComponent();
+            gameCB.SelectedIndex = 0;
         }
 
         private void ScreenshotBtn_Click(object sender, EventArgs e)
@@ -54,7 +55,22 @@ namespace DialogueCapture
                 Graphics graphics = Graphics.FromImage(screenshot as Image);
                 graphics.CopyFromScreen(screen.Bounds.Left, screen.Bounds.Top, 0, 0, screenshot.Size);
 
-                Bitmap search = new Bitmap(Properties.Resources.template);
+                Bitmap search;
+                int xOffset;
+                int yOffset;
+
+                if (gameCB.SelectedIndex == 0)
+                {
+                    search = new Bitmap(Properties.Resources.template);
+                    xOffset = 220;
+                    yOffset = 125;
+                }
+                else
+                {
+                    search = new Bitmap(Properties.Resources.template_old);
+                    xOffset = 0;
+                    yOffset = 0;
+                }
 
                 for (int y = 0; y < screenshot.Height; y++)
                 {
@@ -67,8 +83,8 @@ namespace DialogueCapture
                             if (consecutivePixels > 50)
                             {
                                 
-                                xPos = x - consecutivePixels + screen.Bounds.Left - 220;
-                                yPos = y - 125;
+                                xPos = x - consecutivePixels + screen.Bounds.Left - xOffset;
+                                yPos = y - yOffset;
                                 found = true;
                                 break;
                             }
@@ -96,7 +112,20 @@ namespace DialogueCapture
 
         private void TakeScreenshot()
         {
-            Bitmap screenshot = new Bitmap(522, 146);
+            int xSize;
+            int ySize;
+
+            if (gameCB.SelectedIndex == 0)
+            {
+                xSize = 522;
+                ySize = 146;
+            }
+            else
+            {
+                xSize = 518;
+                ySize = 141;
+            }
+            Bitmap screenshot = new Bitmap(xSize, ySize);
             Graphics graphics = Graphics.FromImage(screenshot as Image);
             graphics.CopyFromScreen(xPos, yPos, 0, 0, screenshot.Size);
 

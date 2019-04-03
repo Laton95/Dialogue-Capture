@@ -40,6 +40,7 @@
             this.frameTmr = new System.Windows.Forms.Timer(this.components);
             this.animatedCb = new System.Windows.Forms.CheckBox();
             this.folderBtn = new System.Windows.Forms.Button();
+            this.gameCB = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dialoguePb)).BeginInit();
             this.SuspendLayout();
             // 
@@ -87,7 +88,7 @@
             // 
             // findDialogueBtn
             // 
-            this.findDialogueBtn.Location = new System.Drawing.Point(12, 310);
+            this.findDialogueBtn.Location = new System.Drawing.Point(161, 310);
             this.findDialogueBtn.Name = "findDialogueBtn";
             this.findDialogueBtn.Size = new System.Drawing.Size(80, 23);
             this.findDialogueBtn.TabIndex = 4;
@@ -130,7 +131,7 @@
             // 
             // folderBtn
             // 
-            this.folderBtn.Location = new System.Drawing.Point(98, 310);
+            this.folderBtn.Location = new System.Drawing.Point(247, 310);
             this.folderBtn.Name = "folderBtn";
             this.folderBtn.Size = new System.Drawing.Size(75, 23);
             this.folderBtn.TabIndex = 8;
@@ -138,11 +139,25 @@
             this.folderBtn.UseVisualStyleBackColor = true;
             this.folderBtn.Click += new System.EventHandler(this.FolderBtn_Click);
             // 
+            // gameCB
+            // 
+            this.gameCB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.gameCB.FormattingEnabled = true;
+            this.gameCB.Items.AddRange(new object[] {
+            "Runescape",
+            "Old School Runescape"});
+            this.gameCB.Location = new System.Drawing.Point(12, 312);
+            this.gameCB.MaxDropDownItems = 2;
+            this.gameCB.Name = "gameCB";
+            this.gameCB.Size = new System.Drawing.Size(143, 21);
+            this.gameCB.TabIndex = 9;
+            // 
             // dialogueFrm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1068, 341);
+            this.Controls.Add(this.gameCB);
             this.Controls.Add(this.folderBtn);
             this.Controls.Add(this.animatedCb);
             this.Controls.Add(this.subfolderLbl);
@@ -175,6 +190,7 @@
         private System.Windows.Forms.Timer frameTmr;
         private System.Windows.Forms.CheckBox animatedCb;
         private System.Windows.Forms.Button folderBtn;
+        private System.Windows.Forms.ComboBox gameCB;
     }
 }
 
