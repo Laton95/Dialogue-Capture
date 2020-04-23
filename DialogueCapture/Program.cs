@@ -16,7 +16,7 @@ namespace DialogueCapture
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new dialogueFrm());
+            Application.Run(new DialogueForm());
         }
     }
 }

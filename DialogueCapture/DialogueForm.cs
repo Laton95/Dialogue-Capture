@@ -1,19 +1,27 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DialogueCapture
 {
-    public partial class dialogueFrm : Form
+    public partial class DialogueForm : Form
     {
+        enum Game
+        {
+            RUNESCAPE,
+            OLDSCHOOL
+        }
+
         int xPos;
         int yPos;
 
-        int clicks = 0;
-
-        public dialogueFrm()
+        public DialogueForm()
         {
             InitializeComponent();
             gameCB.SelectedIndex = 0;
@@ -35,22 +43,37 @@ namespace DialogueCapture
             SaveScreenshot();
         }
 
-        private void FindDialogueBtn_Click(object sender, EventArgs e)
+        private async void FindDialogueBtn_Click(object sender, EventArgs e)
         {
-            FindDialogue();
+            screenshotBtn.Enabled = false;
+            instantSaveBtn.Enabled = false;
+
+            Tuple<int, int> start = null;
+
+            Game game = gameCB.SelectedIndex == 0 ? Game.RUNESCAPE : Game.OLDSCHOOL;
+
+            await Task.Run(() =>
+            {
+                start = FindDialogue(game);
+            });
+
+            if (start == null)
+            {
+                MessageBox.Show("Dialogue not found.");
+            }
+            else
+            {
+                xPos = start.Item1;
+                yPos = start.Item2;
+                screenshotBtn.Enabled = true;
+                instantSaveBtn.Enabled = true;
+            }
         }
 
-        private void FindDialogue()
+        private Tuple<int, int> FindDialogue(Game game)
         {
-            bool found = false;
-
             foreach (Screen screen in Screen.AllScreens)
             {
-                if (found)
-                {
-                    break;
-                }
-
                 Bitmap screenshot = new Bitmap(screen.Bounds.Width, screen.Bounds.Height);
                 Graphics graphics = Graphics.FromImage(screenshot as Image);
                 graphics.CopyFromScreen(screen.Bounds.Left, screen.Bounds.Top, 0, 0, screenshot.Size);
@@ -59,17 +82,20 @@ namespace DialogueCapture
                 int xOffset;
                 int yOffset;
 
-                if (gameCB.SelectedIndex == 0)
+                switch (game)
                 {
-                    search = new Bitmap(Properties.Resources.template);
-                    xOffset = 220;
-                    yOffset = 125;
-                }
-                else
-                {
-                    search = new Bitmap(Properties.Resources.template_old);
-                    xOffset = 0;
-                    yOffset = 0;
+                    case Game.RUNESCAPE:
+                        search = new Bitmap(Properties.Resources.template);
+                        xOffset = 220;
+                        yOffset = 125;
+                        break;
+                    case Game.OLDSCHOOL:
+                        search = new Bitmap(Properties.Resources.template_old);
+                        xOffset = 0;
+                        yOffset = 0;
+                        break;
+                    default:
+                        return null;
                 }
 
                 for (int y = 0; y < screenshot.Height; y++)
@@ -82,11 +108,7 @@ namespace DialogueCapture
                         {
                             if (consecutivePixels > 50)
                             {
-                                
-                                xPos = x - consecutivePixels + screen.Bounds.Left - xOffset;
-                                yPos = y - yOffset;
-                                found = true;
-                                break;
+                                return new Tuple<int, int>(x - consecutivePixels + screen.Bounds.Left - xOffset, y - yOffset + screen.Bounds.Top);
                             }
 
                             consecutivePixels++;
@@ -99,15 +121,7 @@ namespace DialogueCapture
                 }
             }
 
-            if (!found)
-            {
-                MessageBox.Show("Dialogue not found.");
-            }
-            else
-            {
-                screenshotBtn.Enabled = true;
-                instantSaveBtn.Enabled = true;
-            }
+            return null;
         }
 
         private void TakeScreenshot()
@@ -125,6 +139,7 @@ namespace DialogueCapture
                 xSize = 518;
                 ySize = 141;
             }
+
             Bitmap screenshot = new Bitmap(xSize, ySize);
             Graphics graphics = Graphics.FromImage(screenshot as Image);
             graphics.CopyFromScreen(xPos, yPos, 0, 0, screenshot.Size);
@@ -140,73 +155,66 @@ namespace DialogueCapture
             Image image = dialoguePb.Image;
             if (image != null)
             {
-                string folderName = getFolderPath();
-                
-                try
+                SaveFileDialog saveFileDialog = new SaveFileDialog
                 {
-                    Directory.CreateDirectory(folderName);
-                    string path = string.Format(folderName + "/{0}.png", DateTime.Now.ToString("ss-mm-HH-dd-MM-yyyy"));
+                    Filter = "Png Image|*.png",
+                    Title = "Save the dialogue screenshot",
+                    FileName = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss"),
+                    InitialDirectory = GetDirectory()
+                };
 
-                    image.Save(path);
-                }
-                catch (Exception e)
+                saveFileDialog.ShowDialog();
+
+                if (saveFileDialog.FileName != "")
                 {
-                    MessageBox.Show(e.Message + " (Probably bad subfolder name).");
+                    FileStream fileStream = (FileStream)saveFileDialog.OpenFile();
+                    image.Save(fileStream, ImageFormat.Png);
+                    fileStream.Close();
                 }
             }
         }
 
-        private string getFolderPath()
+        private void OpenFolderBtn_Click(object sender, EventArgs e)
         {
-            string folderName = "Dialogue Screenshots";
-            string subfolder = subfolderTb.Text;
-
-            if (subfolder.Length > 0)
-            {
-                folderName += @"\" + subfolder;
-            }
-
-            return folderName;
-        }
-
-        private void FrameTmr_Tick(object sender, EventArgs e)
-        {
-            if (dialoguePb.Image != null)
-            {
-                TakeScreenshot();
-            }
-        }
-
-        private void AnimatedCb_CheckedChanged(object sender, EventArgs e)
-        {
-            frameTmr.Enabled = animatedCb.Checked;
-        }
-
-        private void DialoguePb_Click(object sender, EventArgs e)
-        {
-            clicks++;
-            if (clicks > 2)
-            {
-                animatedCb.Visible = true;
-            }
-        }
-
-        private void FolderBtn_Click(object sender, EventArgs e)
-        {
-            string folderName = getFolderPath();
-            
-            if (!Directory.Exists(folderName))
-            {
-                Directory.CreateDirectory(folderName);
-            }
-
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
-                Arguments = folderName,
+                Arguments = GetDirectory(),
                 FileName = "explorer.exe"
             };
 
             Process.Start(startInfo);
+        }
+
+        public static string GetDirectory()
+        {
+            string directory =  Environment.CurrentDirectory + @"\Dialogue Screenshots";
+
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
+            return directory;
+        }
+
+        private void stitchBtn_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Multiselect = true;
+            openFileDialog.ShowDialog();
+
+            List<Bitmap> images = new List<Bitmap>();
+
+            foreach (string fileName in openFileDialog.FileNames)
+            {
+                images.Add(new Bitmap(fileName));
+            }
+
+            if (images.Count > 0)
+            {
+                StitchForm form = new StitchForm(images);
+                form.Show();
+            }
         }
     }
 }

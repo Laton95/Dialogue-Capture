@@ -1,6 +1,6 @@
 ﻿namespace DialogueCapture
 {
-    partial class dialogueFrm
+    partial class DialogueForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,19 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(dialogueFrm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DialogueForm));
             this.dialoguePb = new System.Windows.Forms.PictureBox();
             this.screenshotBtn = new System.Windows.Forms.Button();
             this.saveBtn = new System.Windows.Forms.Button();
-            this.instantSaveBtn = new System.Windows.Forms.Button();
             this.findDialogueBtn = new System.Windows.Forms.Button();
-            this.subfolderTb = new System.Windows.Forms.TextBox();
-            this.subfolderLbl = new System.Windows.Forms.Label();
-            this.frameTmr = new System.Windows.Forms.Timer(this.components);
-            this.animatedCb = new System.Windows.Forms.CheckBox();
-            this.folderBtn = new System.Windows.Forms.Button();
+            this.openFolderBtn = new System.Windows.Forms.Button();
             this.gameCB = new System.Windows.Forms.ComboBox();
+            this.instantSaveBtn = new System.Windows.Forms.Button();
+            this.stitchBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dialoguePb)).BeginInit();
             this.SuspendLayout();
             // 
@@ -51,7 +47,6 @@
             this.dialoguePb.Size = new System.Drawing.Size(1044, 292);
             this.dialoguePb.TabIndex = 0;
             this.dialoguePb.TabStop = false;
-            this.dialoguePb.Click += new System.EventHandler(this.DialoguePb_Click);
             // 
             // screenshotBtn
             // 
@@ -75,17 +70,6 @@
             this.saveBtn.UseVisualStyleBackColor = true;
             this.saveBtn.Click += new System.EventHandler(this.SaveBtn_Click);
             // 
-            // instantSaveBtn
-            // 
-            this.instantSaveBtn.Enabled = false;
-            this.instantSaveBtn.Location = new System.Drawing.Point(975, 310);
-            this.instantSaveBtn.Name = "instantSaveBtn";
-            this.instantSaveBtn.Size = new System.Drawing.Size(81, 23);
-            this.instantSaveBtn.TabIndex = 3;
-            this.instantSaveBtn.Text = "Quick Take";
-            this.instantSaveBtn.UseVisualStyleBackColor = true;
-            this.instantSaveBtn.Click += new System.EventHandler(this.InstantSaveBtn_Click);
-            // 
             // findDialogueBtn
             // 
             this.findDialogueBtn.Location = new System.Drawing.Point(161, 310);
@@ -96,48 +80,15 @@
             this.findDialogueBtn.UseVisualStyleBackColor = true;
             this.findDialogueBtn.Click += new System.EventHandler(this.FindDialogueBtn_Click);
             // 
-            // subfolderTb
+            // openFolderBtn
             // 
-            this.subfolderTb.Location = new System.Drawing.Point(585, 312);
-            this.subfolderTb.Name = "subfolderTb";
-            this.subfolderTb.Size = new System.Drawing.Size(100, 20);
-            this.subfolderTb.TabIndex = 5;
-            // 
-            // subfolderLbl
-            // 
-            this.subfolderLbl.AutoSize = true;
-            this.subfolderLbl.Location = new System.Drawing.Point(484, 315);
-            this.subfolderLbl.Name = "subfolderLbl";
-            this.subfolderLbl.Size = new System.Drawing.Size(95, 13);
-            this.subfolderLbl.TabIndex = 6;
-            this.subfolderLbl.Text = "Optional subfolder:";
-            // 
-            // frameTmr
-            // 
-            this.frameTmr.Interval = 10;
-            this.frameTmr.Tick += new System.EventHandler(this.FrameTmr_Tick);
-            // 
-            // animatedCb
-            // 
-            this.animatedCb.AutoSize = true;
-            this.animatedCb.Location = new System.Drawing.Point(691, 314);
-            this.animatedCb.Name = "animatedCb";
-            this.animatedCb.Size = new System.Drawing.Size(70, 17);
-            this.animatedCb.TabIndex = 7;
-            this.animatedCb.Text = "Animated";
-            this.animatedCb.UseVisualStyleBackColor = true;
-            this.animatedCb.Visible = false;
-            this.animatedCb.CheckedChanged += new System.EventHandler(this.AnimatedCb_CheckedChanged);
-            // 
-            // folderBtn
-            // 
-            this.folderBtn.Location = new System.Drawing.Point(247, 310);
-            this.folderBtn.Name = "folderBtn";
-            this.folderBtn.Size = new System.Drawing.Size(75, 23);
-            this.folderBtn.TabIndex = 8;
-            this.folderBtn.Text = "Open Folder";
-            this.folderBtn.UseVisualStyleBackColor = true;
-            this.folderBtn.Click += new System.EventHandler(this.FolderBtn_Click);
+            this.openFolderBtn.Location = new System.Drawing.Point(247, 310);
+            this.openFolderBtn.Name = "openFolderBtn";
+            this.openFolderBtn.Size = new System.Drawing.Size(75, 23);
+            this.openFolderBtn.TabIndex = 8;
+            this.openFolderBtn.Text = "Open Folder";
+            this.openFolderBtn.UseVisualStyleBackColor = true;
+            this.openFolderBtn.Click += new System.EventHandler(this.OpenFolderBtn_Click);
             // 
             // gameCB
             // 
@@ -152,16 +103,35 @@
             this.gameCB.Size = new System.Drawing.Size(143, 21);
             this.gameCB.TabIndex = 9;
             // 
+            // instantSaveBtn
+            // 
+            this.instantSaveBtn.Enabled = false;
+            this.instantSaveBtn.Location = new System.Drawing.Point(975, 310);
+            this.instantSaveBtn.Name = "instantSaveBtn";
+            this.instantSaveBtn.Size = new System.Drawing.Size(81, 23);
+            this.instantSaveBtn.TabIndex = 3;
+            this.instantSaveBtn.Text = "Quick Take";
+            this.instantSaveBtn.UseVisualStyleBackColor = true;
+            this.instantSaveBtn.Click += new System.EventHandler(this.InstantSaveBtn_Click);
+            // 
+            // stitchBtn
+            // 
+            this.stitchBtn.Location = new System.Drawing.Point(328, 310);
+            this.stitchBtn.Name = "stitchBtn";
+            this.stitchBtn.Size = new System.Drawing.Size(87, 23);
+            this.stitchBtn.TabIndex = 10;
+            this.stitchBtn.Text = "Stitch Dialogue";
+            this.stitchBtn.UseVisualStyleBackColor = true;
+            this.stitchBtn.Click += new System.EventHandler(this.stitchBtn_Click);
+            // 
             // dialogueFrm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1068, 341);
+            this.Controls.Add(this.stitchBtn);
             this.Controls.Add(this.gameCB);
-            this.Controls.Add(this.folderBtn);
-            this.Controls.Add(this.animatedCb);
-            this.Controls.Add(this.subfolderLbl);
-            this.Controls.Add(this.subfolderTb);
+            this.Controls.Add(this.openFolderBtn);
             this.Controls.Add(this.findDialogueBtn);
             this.Controls.Add(this.instantSaveBtn);
             this.Controls.Add(this.saveBtn);
@@ -174,7 +144,6 @@
             this.Text = "Dialogue Snapper";
             ((System.ComponentModel.ISupportInitialize)(this.dialoguePb)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -183,14 +152,11 @@
         private System.Windows.Forms.PictureBox dialoguePb;
         private System.Windows.Forms.Button screenshotBtn;
         private System.Windows.Forms.Button saveBtn;
-        private System.Windows.Forms.Button instantSaveBtn;
         private System.Windows.Forms.Button findDialogueBtn;
-        private System.Windows.Forms.TextBox subfolderTb;
-        private System.Windows.Forms.Label subfolderLbl;
-        private System.Windows.Forms.Timer frameTmr;
-        private System.Windows.Forms.CheckBox animatedCb;
-        private System.Windows.Forms.Button folderBtn;
+        private System.Windows.Forms.Button openFolderBtn;
         private System.Windows.Forms.ComboBox gameCB;
+        private System.Windows.Forms.Button instantSaveBtn;
+        private System.Windows.Forms.Button stitchBtn;
     }
 }
 
